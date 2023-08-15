@@ -3,11 +3,10 @@ from .models import *
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.pk')
 
     class Meta:
         model = Message
-        fields = ['user', 'ticket', 'content']
+        fields = ['content']
 
 
 class TicketViewSerializer(serializers.ModelSerializer):

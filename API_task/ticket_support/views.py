@@ -60,7 +60,7 @@ class CreateTicket(generics.CreateAPIView):
 
 
 # Изменение статуса тикета
-class TicketChange(generics.RetrieveUpdateAPIView):
+class TicketChange(generics.UpdateAPIView):
     permission_classes = [permissions.IsAdminUser]
     serializer_class = TicketChangeSerializer
     queryset = Ticket.objects.all()
@@ -69,7 +69,12 @@ class TicketChange(generics.RetrieveUpdateAPIView):
 # Сообщения добавляются в любой тикет несмотря на права
 class TicketReply(generics.CreateAPIView):
     serializer_class = MessageSerializer
-    permission_classes = (IsOwnerTicketOrAdminOnly,)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        ticket_id = self.kwargs.get('pk')
+        ticket = get_object_or_404(Ticket, id=ticket_id)
+
+        if self.request.user.is_staff or ticket.user == self.request.user:
+            serializer.save(user=self.request.user, ticket=ticket)
+        else:
+            raise PermissionDenied("You do not have permission to create a reply for this ticket.")
