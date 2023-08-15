@@ -3,17 +3,16 @@ from .models import *
 
 
 class MessageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Message
         fields = ['content']
 
 
 class TicketViewSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Ticket
         fields = ['id', 'user', 'subject', 'description', 'status']
+
 
 class TicketDetailViewSerializer(serializers.ModelSerializer):
     replies = MessageSerializer(many=True, read_only=True)
@@ -24,10 +23,9 @@ class TicketDetailViewSerializer(serializers.ModelSerializer):
 
 
 class TicketChangeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Ticket
-        fields = ['id','status']
+        fields = ['id', 'status']
 
 
 class TicketCreateSerializer(serializers.ModelSerializer):

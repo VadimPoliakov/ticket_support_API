@@ -1,13 +1,7 @@
-from django.contrib.auth import logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView
-from django.http import Http404
-from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse_lazy
-from rest_framework import viewsets, permissions, status, mixins, generics
-from rest_framework.exceptions import PermissionDenied, NotFound, ValidationError
+from django.shortcuts import get_object_or_404
+from rest_framework import permissions, status, generics
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 
 from .permissions import *
 from .models import *

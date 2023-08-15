@@ -1,5 +1,4 @@
-from django.template.defaulttags import url
-from django.urls import path, include, re_path
+from django.urls import path, re_path
 from .views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from drf_yasg.views import get_schema_view
