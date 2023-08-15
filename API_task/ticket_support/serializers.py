@@ -14,27 +14,26 @@ class TicketViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['pk', 'user', 'subject', 'description', 'status']
+        fields = ['id', 'user', 'subject', 'description', 'status']
 
 class TicketDetailViewSerializer(serializers.ModelSerializer):
-
     replies = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Ticket
-        fields = ['pk', 'user', 'subject', 'description', 'status', 'replies']
+        fields = ['id', 'user', 'subject', 'description', 'status', 'replies']
 
 
 class TicketChangeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ['pk','status']
+        fields = ['id','status']
 
 
 class TicketCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    status = serializers.HiddenField(default=Status.objects.get(pk=1))
+    status = serializers.HiddenField(default=Ticket.Status.STATUS_OPEN)
 
     class Meta:
         model = Ticket

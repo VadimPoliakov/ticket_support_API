@@ -9,11 +9,9 @@ from rest_framework.exceptions import PermissionDenied, NotFound, ValidationErro
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from .forms import LoginUserForm
-from .permissions import IsOwnerOrAdminOnly, IsOwnerTicketOrAdminOnly
+from .permissions import *
 from .models import *
 from .serializers import *
-
 
 
 # Чтение всех тикетов
@@ -33,30 +31,29 @@ class TicketsStatusList(generics.ListAPIView):
 
     def get_queryset(self):
         status_name = self.kwargs.get('status')
-        status = get_object_or_404(Status, name=status_name)
-        if status:
-            if self.request.user.is_staff:
-                return Ticket.objects.filter(status=status)
+        if status_name not in dict(Ticket.Status.choices):
+            return None
+        if self.request.user.is_staff:
+            return Ticket.objects.filter(status=status_name)
 
-            return Ticket.objects.filter(user=self.request.user, status=status)
-
+        return Ticket.objects.filter(user=self.request.user, status=status_name)
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-
+        if queryset is None:
+            return Response({'detail': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
-
-# Чтение 1 тикета (Готово)
+# Чтение 1 тикета
 class TicketDetail(generics.RetrieveAPIView):
     serializer_class = TicketDetailViewSerializer
     queryset = Ticket.objects.all()
     permission_classes = (IsOwnerOrAdminOnly,)
 
 
-# Создание тикета (Готово)
+# Создание тикета
 class CreateTicket(generics.CreateAPIView):
     serializer_class = TicketCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -69,30 +66,6 @@ class TicketChange(generics.RetrieveUpdateAPIView):
     queryset = Ticket.objects.all()
 
 
-# Добавление сообщения
-# class TicketReplyViewSet(mixins.CreateModelMixin,
-#                          GenericViewSet):
-#     serializer_class = MessageSerializer
-#
-#     # permission_classes = (IsOwnerOrAdminOnly,)
-#
-#     def create(self, request, *args, **kwargs):
-#         ticket_id = request.data.get('ticket')
-#         try:
-#             ticket = Ticket.objects.get(id=ticket_id)
-#
-#             if not request.user.is_staff and request.user != ticket.user:
-#                 raise PermissionDenied('Permission denied')
-#
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save(ticket=ticket, user=request.user)
-#
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-#         except Ticket.DoesNotExist:
-#             raise NotFound('Ticket not found')
-
 # Сообщения добавляются в любой тикет несмотря на права
 class TicketReply(generics.CreateAPIView):
     serializer_class = MessageSerializer
@@ -100,14 +73,3 @@ class TicketReply(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-class LoginUser(LoginView):
-    form_class = LoginUserForm
-    template_name = "ticket_support/signin.html"
-    success_url = reverse_lazy('signin')
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('signin')

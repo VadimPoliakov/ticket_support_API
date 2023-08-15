@@ -16,15 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from API_task import settings
-from django.conf.urls.static import static
 from ticket_support.views import *
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', LoginUser.as_view(), name="signin"),
-    path('logout/', logout_user, name="logout"),
     path('api/v1/', include('ticket_support.urls')),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -17,12 +17,12 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields = ('id', 'ticket')
 
 
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at', 'updated_at')
-    list_display_links = ('name',)
-    search_fields = ('name',)
+# class StatusAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'created_at', 'updated_at')
+#     list_display_links = ('name',)
+#     search_fields = ('name',)
 
 
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(Message, MessageAdmin)
-admin.site.register(Status, StatusAdmin)
+#admin.site.register(Status, StatusAdmin)
