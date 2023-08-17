@@ -2,11 +2,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-
+from .tasks import *
 from .permissions import *
 from .models import *
 from .serializers import *
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Чтение всех тикетов
 class TicketsList(generics.ListAPIView):
@@ -19,7 +19,7 @@ class TicketsList(generics.ListAPIView):
         return Ticket.objects.filter(user=self.request.user)
 
 
-# Чтение тикетов по статусу
+#Чтение тикетов по статусу
 class TicketsStatusList(generics.ListAPIView):
     serializer_class = TicketViewSerializer
 
@@ -72,3 +72,9 @@ class TicketReply(generics.CreateAPIView):
             serializer.save(user=self.request.user, ticket=ticket)
         else:
             raise PermissionDenied("You do not have permission to create a reply for this ticket.")
+
+
+
+class UserRegistrationView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.AllowAny]

@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'API_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'API_task',
+        'NAME': 'API_task_new',
         'USER': 'postgres',
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': '127.0.0.1',
@@ -208,3 +208,5 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+AUTH_USER_MODEL = 'ticket_support.CustomUser'

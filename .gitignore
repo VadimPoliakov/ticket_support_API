@@ -1,0 +1,8 @@
+/venv/
+*.env
+*.txt
+*.log
+*.DS_Store
+../.gitignore
+./API_task/dump.rdb
+*/.idea/
