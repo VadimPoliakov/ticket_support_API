@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'API_task.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'API_task_new',
+        'NAME': 'API_task_newone',
         'USER': 'postgres',
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': '127.0.0.1',

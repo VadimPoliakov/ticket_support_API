@@ -25,12 +25,15 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=30, blank=True)
+    username = models.CharField(max_length=30, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, blank=True, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, blank=True, related_name='customuser_set')
-
+    date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
+    first_name = models.CharField(max_length=30, blank=True, null=True, verbose_name="Имя")
+    last_name = models.CharField(max_length=30, blank=True, null=True, verbose_name="Фамилия")
+    is_active = models.BooleanField(default=True, verbose_name="Активный")
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

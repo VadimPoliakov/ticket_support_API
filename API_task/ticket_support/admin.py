@@ -12,6 +12,7 @@ class TicketAdmin(admin.ModelAdmin):
     list_editable = ('status',)
 
 
+
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'ticket', 'content', 'created_at', 'updated_at')
@@ -24,3 +25,4 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'email', 'username', 'is_active', 'is_staff')
     list_display_links = ('id', 'email', 'username', 'is_active', 'is_staff')
     search_fields = ('id', 'email', 'username', 'is_active', 'is_staff')
+    readonly_fields = ('date_joined',)
